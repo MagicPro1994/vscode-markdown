@@ -1,0 +1,23 @@
+diff --git a/src/preview.ts b/src/preview.ts
+index ae1fd31..f4c59c9 100644
+--- a/src/preview.ts
++++ b/src/preview.ts
+@@ -25,9 +25,15 @@ function preview(editor: TextEditor) {
+ 
+     let doc = editor.document;
+     if (doc != currentDoc) {
+-        commands.executeCommand('markdown.showPreviewToSide').then(() => {
+-            commands.executeCommand('workbench.action.navigateBack');
+-        });
++        try {
++            commands.executeCommand("markdown-preview-enhanced.openPreview").then(() => {
++                commands.executeCommand('workbench.action.navigateBack');
++            });
++        } catch (error) {
++            commands.executeCommand('markdown.showPreviewToSide').then(() => {
++                commands.executeCommand('workbench.action.navigateBack');
++            });
++        }
+         currentDoc = doc;
+     }
+ }
