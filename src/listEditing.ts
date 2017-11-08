@@ -2,7 +2,6 @@
 
 import { commands, window, workspace, ExtensionContext, Position, Range, Selection, TextDocument } from 'vscode';
 import * as vscode from 'vscode';
-import * as handler from "./unikeyHandler";
 
 export function activate(context: ExtensionContext) {
     context.subscriptions.push(commands.registerCommand('markdown.extension.onEnterKey', onEnterKey));
@@ -117,10 +116,7 @@ async function onTabKey() {
 async function onBackspaceKey() {
     let editor = window.activeTextEditor
     let oldPosition = editor.selection.active; // Old cursor position
-    // FIXME: Handle Vietnamese //
-    // let isTypingVn = await handler.vnTest();
     let newPosition = editor.selection.active; // Current cursor position
-    // if (isTypingVn == false && oldPosition.character == newPosition.character) { // Not typing Vietnamese
     let document = editor.document;
     let textBeforeCursor = document.lineAt(newPosition.line).text.substr(0, newPosition.character);
 
@@ -141,26 +137,6 @@ async function onBackspaceKey() {
         // Normal behavior
         return commands.executeCommand('deleteLeft');
     }
-    // } else {
-    //     if (oldPosition.character == newPosition.character) {
-    //         // Normal behavior
-    //         return commands.executeCommand('deleteLeft');
-    //     } else {
-    //         let characterCount = newPosition.character - oldPosition.character;
-    //         if (characterCount < 0) {
-    //             return false;
-    //         }
-    //         return handler.handleUnikey(characterCount).then(result => {
-    //             if (result == true) {
-    //                 deleteRange(editor, new Range(newPosition.line, oldPosition.character - characterCount,
-    //                     newPosition.line, oldPosition.character));
-    //                 return true;
-    //             } else {
-    //                 return false;
-    //             }
-    //         });
-    //     }
-    // }
 }
 
 async function deleteRange(editor: vscode.TextEditor, range: Range): Promise<boolean> {
